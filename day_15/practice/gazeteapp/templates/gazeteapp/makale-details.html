@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    {{ article.title }}
+{% endblock  %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-3">
+                <img src="{% static 'img/makale.jpg' %}" class="img-fluid rounded-start" alt="makale">
+            </div>
+            <div class="col-9">
+                <h1 class="h3">Makale Adı: {{ article.title }}</h1>
+                <p>
+                    <strong>Yayın Tarihi:</strong> {{ article.created_date }} <br><br>
+                    <strong>Yazar Adı:</strong> {{ article.author }} <br><br>
+                    <strong>İçerik:</strong> {{ article.content }} <br><br>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

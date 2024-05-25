@@ -1,0 +1,14 @@
+{% autoescape off %}
+    Merhaba,
+
+    Web sitemize kaydolduğunuz için teşekkür ederiz.
+
+    Sisteme giriş yapabilmeniz için aşağıdaki doğrulama linkini tıkladıktan sonra,
+
+    sisteme giriş yapabileceksiniz.
+
+    Saygılarımızla...
+
+    http://{{domain}}{% url 'email-verification' uidb64=uid token=token %}
+    
+{% endautoescape %}

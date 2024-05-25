@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Kitap Listesi
+{% endblock  %}
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+
+      <div class="col-12">
+          <!-- content -->
+          <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 120px;"></th>
+                    <th>Kitabın Adı</th>
+                    <th>Yazar/Yazarlar</th>
+                    <th style="width: 150px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for book in books %}
+                    <tr>
+                        <td>
+                            <img src="{{ book.image.url }}" class="img-fluid rounded-start" alt="{{ book.name }}">
+                        </td>
+                        <td>{{ book.name }}</td>
+                        <td>
+                            
+                            {% for author in book.author.all %}
+                                {{ author }} <br>
+                            {% endfor %}
+                                
+                        </td>
+                        <td>
+                            <a href="{% url 'book-edit' book.slug %}" class="btn btn-primary btn-sm">Güncelle</a>
+                            <a href="{% url 'book-delete' book.slug %}" class="btn btn-danger btn-sm">Sil</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+{% endblock  %}

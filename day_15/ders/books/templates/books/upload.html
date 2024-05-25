@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+    Resim Yükle
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">            
+            <div class="col-12">
+                <!-- Buraya içerik gelecek -->
+                <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="uploadImage" name="image">
+                        <button type="submit" class="btn btn-outline-primary">Yükle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

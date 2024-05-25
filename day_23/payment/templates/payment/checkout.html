@@ -1,0 +1,129 @@
+{% include 'store/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+    <style>
+        body{
+            background-color: gray;
+        }
+    </style>
+
+    <body>
+        <br>
+
+        <div class="container bg-white shadow-md p-5 form-layout" style="width: 500px; border-radius: 20px;">
+            <form id="form" onsubmit="event.preventDefault();">
+                <div>
+                    <div class="form-field">
+                        <input id="email" type="email" class="form-control validate" placeholder="Email adress*" autocomplete="off" value="{{ shipping.email }}" required>
+                    </div>
+
+                    <br>
+                    
+                    <div class="form-field">
+                        <input id="address1" type="text" class="form-control validate" placeholder="Address 1*" autocomplete="off" value="{{ shipping.address1 }}" required>
+                    </div>
+
+                    <br>
+
+                    <div class="form-field">
+                        <input id="address2" type="text" class="form-control validate" placeholder="Address 2*" autocomplete="off" value="{{ shipping.address2 }}" required>
+                    </div>
+
+                    <br>
+
+                    <div class="form-field">
+                        <input id="city" type="text" class="form-control validate" placeholder="City*" autocomplete="off" value="{{ shipping.city }}" required>
+                    </div>
+
+                    <br>
+                    
+                    <div class="form-field">
+                        <input id="state" type="text" class="form-control validate" placeholder="State (Optional)" autocomplete="off" value="{{ shipping.state }}" required>
+                    </div>
+
+                    <br>
+
+                    <div class="form-field">
+                        <input id="zipcode" type="text" class="form-control validate" placeholder="Zip code (Optional)" autocomplete="off" value="{{ shipping.zipcode }}" required>
+                    </div>
+
+                    <!-- <button id="complete-order" class="btn btn-primary navbar-btn text-white"> &nbsp; Complete order </button> -->
+
+                    <br>
+
+                    <div id="paypal-button-container">
+
+                        <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </body>
+    <br><br>
+
+
+<!-- PayPal JS SDK --> 
+
+<script>
+
+    const paypalButtonsComponent = paypal.Buttons({
+       // optional styling for buttons
+       // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+       style: {
+         color: "gold",
+         shape: "rect",
+         layout: "vertical"
+       },
+
+       // set up the transaction
+       createOrder: (data, actions) => {
+           // pass in any options from the v2 orders create call:
+           // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+           const createOrderPayload = {
+               purchase_units: [
+                   {
+                       amount: {
+                           value: "88.44"
+                       }
+                   }
+               ]
+           };
+
+           return actions.order.create(createOrderPayload);
+       },
+
+       // finalize the transaction
+       onApprove: (data, actions) => {
+           const captureOrderHandler = (details) => {
+               const payerName = details.payer.name.given_name;
+               console.log('Transaction completed');
+
+
+           };
+
+           return actions.order.capture().then(captureOrderHandler);
+       },
+
+       // handle unrecoverable errors
+       onError: (err) => {
+           console.error('An error prevented the buyer from checking out with PayPal');
+
+ 
+
+       }
+   });
+
+   paypalButtonsComponent
+       .render("#paypal-button-container")
+       .catch((err) => {
+           console.error('PayPal Buttons failed to render');
+       });
+
+</script>
+{% endblock  %}
+    

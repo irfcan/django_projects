@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    Telefon Ekle
+{% endblock  %}
+    
+{% block css_files %} 
+    <link rel="stylesheet" href="{% static 'phoneBook/css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+
+            <div class="col-12">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 120px;"></th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Telefon</th>
+                            <th>Kategori</th>
+                            <th style="width: 150px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for phone in phones %}
+                            <tr>
+                                <td>
+                                    <img src="{{ phone.image.url }}" alt="{{ phone.ad }}" class="img-fluid">
+                                </td>
+                                <td>{{ phone.ad }}</td>
+                                <td>{{ phone.soyad }}</td>
+                                <td>{{ phone.telefon }}</td>
+                                <td>
+                                    
+                                    {% for category in phone.kategori.all %}
+                                        <li>{{ category }}</li>
+                                    {% endfor %}
+                                        
+                                </td>
+                                <td>
+                                    <a href="{% url 'phone-edit' phone.slug %}" class="btn btn-primary btn-sm">Güncelle</a>
+                                    <a href="{% url 'phone-delete' phone.slug %}" class="btn btn-danger btn-sm">Sil</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

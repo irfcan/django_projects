@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Kullanıcılar Anasayfa
+{% endblock  %}
+  
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+  
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-3">
+
+        {% include 'books/partial/__categories.html' %}
+
+      </div>
+
+      <div class="col-9">
+          <!-- content -->
+
+          
+          {% if users|length == 0 %}
+            <div class="alert alert-danger">Kullanıcı Bulunamadı</div>
+          {% endif %}
+            
+          
+          {% for user in users %}
+            
+              <h1 class="h3">Kullanıcı adı: {{ user.username }}</h1>
+              <p>
+                <strong>Ad: </strong> {{ user.first_name }} <br><br>
+                <strong>Soyad: </strong> {{ user.last_name }} <br><br>
+                <strong>Email: </strong> {{ user.email }} <br><br>
+              </p>
+              
+          {% endfor %}       
+
+            
+      </div>
+  </div>
+</div>
+{% endblock  %}
+  

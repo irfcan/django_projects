@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    Anasayfa
+{% endblock  %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+    
+
+
+{% block content %}
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-3">
+                <!-- menu -->
+
+                {% include 'gazeteapp/partial/__authors.html' %}
+            </div>
+            <div class="col-9">
+                <!-- content -->
+                <ul>
+                    
+                    {% for article in articles %}
+                        <li>{{ article }}</li>
+                    {% endfor %}
+                        
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+{% endblock  %}
+    
+
+{% block js_files %}
+    
+{% endblock  %}

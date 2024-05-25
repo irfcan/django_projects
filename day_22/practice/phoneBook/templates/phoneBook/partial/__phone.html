@@ -1,0 +1,35 @@
+{% load static %}
+<div class="card mb-3">
+    <div class="row">
+        <div class="col-4">
+            <img src="{{ phone.image.url }}" alt="{{ phone.ad }}" class="img-fluid rounded">
+        </div>
+        <div class="col-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Ad - Soyad:
+                    <a href="{% url 'phone-detail' phone.slug %}">
+                        {{phone.ad}} {{ phone.soyad }}
+                    </a>
+                </h5><br>
+
+                <p class="card-text">
+                    <span>
+                        <strong>Kategori Adı:</strong>
+                        <ul>
+                            
+                            {% for category in phone.kategori.all %}
+                                <li>
+                                    {{ category.name }} <br>
+                                </li>
+                            {% endfor %}
+                                
+                        </ul>
+                    </span>
+                    <strong>Telefon: </strong> {{ phone.telefon }} <br>
+                    <strong>Adresi: </strong> {{ phone.adres|truncatechars:20 }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

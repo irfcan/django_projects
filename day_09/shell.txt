@@ -1,0 +1,89 @@
+Microsoft Windows [Version 10.0.19045.4291]
+(c) Microsoft Corporation. Tüm hakları saklıdır.
+
+C:\Users\Techpro\Desktop\Django\day_09>env\scripts\activate
+
+(env) C:\Users\Techpro\Desktop\Django\day_09>pip install django-extensions
+Requirement already satisfied: django-extensions in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (3.2.3)
+Requirement already satisfied: Django>=3.2 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from django-extensions) (5.0.3)
+Requirement already satisfied: asgiref<4,>=3.7.0 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (3.8.1)
+Requirement already satisfied: sqlparse>=0.3.1 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (0.4.4)  
+Requirement already satisfied: tzdata in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (2024.1)
+
+(env) C:\Users\Techpro\Desktop\Django\day_09>py manage.py shell_plus
+# Shell Plus Model Imports
+from books.models import Author, Book, Category
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+# Shell Plus Django Imports
+from django.core.cache import cache
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
+from django.utils import timezone
+from django.urls import reverse
+from django.db.models import Exists, OuterRef, Subquery
+Python 3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> average_prices = Book.objects.values("category__name").annotate(average_price=Avg("price"))
+>>> average_prices
+<QuerySet [{'category__name': 'Macera', 'average_price': 675.0}, {'category__name': 'PSİKOLOJİ', 'average_price': 850.0}, {'category__name': 'kurgu', 'average_price': 517.5}, {'category__name': 'roman', 'average_price': 700.0}]>
+>>> for data in average_prices:
+...     }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}} }
+KeyboardInterrupt
+>>> for data in average_prices:
+...     print(f"Kategori: {data["category__name"]}, Ortalama: {data[average_price]}")
+  File "<console>", line 2
+        print(f"Kategori: {data["category__name"]}, Ortalama: {data[average_price]}")
+                                 ^^^^^^^^^^^^^^
+SyntaxError: f-string: unmatched '['
+>>> for data in average_prices:                                                   }")
+...     print(f"Kategori: {data['category__name']}, Ortalama: {data['average_price']}")
+... 
+Kategori: Macera, Ortalama: 675.0
+Kategori: PSİKOLOJİ, Ortalama: 850.0
+Kategori: kurgu, Ortalama: 517.5
+Kategori: roman, Ortalama: 700.0
+>>> total_stock = Book.objects.aggregate(total_stock=Sum("stock"))
+>>> print(f"Toplam Kitap Sayısı: {total_stock['total_stock']}") 
+Toplam Kitap Sayısı: 358
+>>>
+>>> 
+>>> books = Book.objects.filter(category__name__icontains="roman", price__lt=50)
+>>> books
+<QuerySet []>
+>>> books = Book.objects.filter(category__name__icontains="roman") | Book.objects.filter(price__lt=50)
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> books = Book.objects.filter(Q(category__name__icontains="roman") | Q(price__lt=50)) 
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>>
+>>> 
+>>> book = Book.objects.get(id=1)
+>>> book
+<Book: İnce Memed>
+>>> book.stock
+50
+>>> Book.objects.filter(id=1).update(stock=F("stock")-1)
+1
+>>> book = Book.objects.get(id=1)
+>>> book
+<Book: İnce Memed>
+>>> book.stock
+49
+>>> Book.objects.filter(id=1).update(stock=F("stock")-1)
+1
+>>> book = Book.objects.get(id=1)
+>>> book.stock
+48
+>>> Book.objects.filter(id=1).update(stock=stock-1)      
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'stock' is not defined
+>>> Book.objects.filter(id=1).update(stock=book.stock-1) 
+1

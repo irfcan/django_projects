@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    Kategori Ekle
+{% endblock  %}
+    
+{% block css_files %} 
+    <link rel="stylesheet" href="{% static 'phoneBook/css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+
+            <div class="col-12">
+                <form action="{% url 'category-create' %}" method="POST" novalidate>
+                    {% csrf_token %}
+
+                    {% include 'partial/__form.html' %}
+
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

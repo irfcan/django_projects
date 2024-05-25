@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}
+    {{ kitap.name }}
+{% endblock  %}
+
+
+{% block css_files %} 
+    <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ book.image.url }}" class="img-fluid rounded-start" alt="{{ book.name }}">
+            </div>
+            <div class="col-9">
+                <h1 class="h3">Kitap Adı: {{ book.name }}</h1><br>
+                <p>
+                    Yazar Adı/Adları:
+                    <ul>
+                        {% for yazar in book.author.all  %}
+                            <li>{{ yazar }}</li>
+                        {% endfor %}
+                    </ul>    
+                    Kategori Adı    : {{ book.category }}<br><br>
+                    Açıklama        : {{ book.description }}<br><br>
+                    Basım Tarihi    : {{ book.publication_date }}<br><br>
+                    Stok Adeti      : {{ book.stock }}<br><br>
+                    Kitabın Fiyatı  : {{ book.price }} ₺
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

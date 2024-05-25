@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Kitaplar Anasayfa
+{% endblock  %}
+  
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+  
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-3">
+
+        {% include 'books/partial/__categories.html' %}
+
+      </div>
+
+      <div class="col-9">
+          <!-- content -->
+          
+          {% for book in books %}
+            
+            {% if book.activate %}
+              {% include 'books/partial/__book.html' %}
+            {% endif %}
+              
+          {% endfor %}
+            
+      </div>
+  </div>
+</div>
+{% endblock  %}
+  

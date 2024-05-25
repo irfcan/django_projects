@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+    Kitap Sil
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">            
+            <div class="col-12">
+                <!-- Buraya içerik gelecek -->
+                <p>
+                    <strong>{{ book.name }} isimli kitabı silmek istiyor musunuz?</strong>
+                </p>
+                <form action="{% url 'book-delete' book.slug %}" method="POST">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-danger">Evet</button>
+                    <a href="{% url 'book-list' %}" class="btn btn-primary">Hayır</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

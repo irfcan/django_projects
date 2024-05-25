@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Register
+{% endblock  %}
+  
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+  
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-12">
+          <!-- content -->
+            <h1>REGISTER</h1>
+            <hr>
+            <form method="POST">
+                {% csrf_token %}
+
+                
+                {% include 'partial/__form.html' %}
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+      </div>
+  </div>
+</div>
+{% endblock  %}
+  

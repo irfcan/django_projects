@@ -1,0 +1,26 @@
+{% include 'store/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+    <style>
+        body{
+            background-color: gray;
+        }
+    </style>
+
+    <body>
+        <div class="container bg-white shadow-md p-5 form-layout">
+            <div class="text-center">
+                <i class="fa fa-check fa-3x text-success" aria-hidden="true"></i>
+                <br><br>
+
+                <h5><strong>Hesabınız şimdi aktif!</strong></h5>
+                <hr>
+                <p>Lütfen giriş yapınız.</p>
+            </div>
+        </div>
+    </body>
+{% endblock  %}
+    

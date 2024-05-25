@@ -1,0 +1,9 @@
+<div class="list-group">
+  <a href="/books" class="list-group-item list-group-item-action">Tüm Kitaplar</a>
+  {% for category in categories %}
+    <a href="{% url 'category_slug' category.slug %}" 
+    class="list-group-item list-group-item-action {% if seciliKategori == category.slug %} active {% endif %}">
+    {{ category }}</a>
+  {% endfor %}
+  
+</div>

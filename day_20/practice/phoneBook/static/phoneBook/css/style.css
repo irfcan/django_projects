@@ -1,0 +1,14 @@
+body {
+    background-color: whitesmoke;
+}
+
+.errorlist {
+    list-style-type: none;
+    color: red;
+    margin: 0;
+    padding: 0;
+}
+
+.invalid input, .invalid textarea {
+    border-color: #dc3545;
+}

@@ -1,0 +1,6 @@
+<div class="list-group">
+    {% for author in authors %}
+        <a href="{% url 'makale-by-author' author.slug %}" class="list-group-item list-group-item-action list-group-item-danger">{{ author }}</a>                  
+    {% endfor %}
+</div>
+

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %} 
+    Telefon Sil
+{% endblock %}
+
+{% block css_files %} 
+    <link rel="stylesheet" href="{% static 'phoneBook/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                 <p>
+                    <strong>{{ phone.ad }} {{ phone.soyad }} isimli kaydı silmek istiyor musunuz?</strong>
+
+                    <form action="{% url 'phone-delete' phone.slug %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Evet</button>
+                        <a href="{% url 'phone-list' %}" class="btn btn-primary">Hayır</a>
+                    </form>
+                 </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

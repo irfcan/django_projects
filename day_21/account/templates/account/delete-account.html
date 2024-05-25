@@ -1,0 +1,41 @@
+{% include 'store/base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <style>
+        body{
+            background-color: gray;
+        }
+    </style>
+
+    <body>
+        <br>
+
+        <div class="container bg-white shadow-md p-5 form-layout">
+            <h3>Profil Silme</h3>
+            <hr>
+            <p>Profilinizi silmek istediğinizden emin misiniz?</p>
+            <br>
+
+            <form action="POST" autocomplete="off">
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-danger navbar-btn text-white">&nbsp;Hesabınızı Silin</button>
+
+                <br><br>
+                
+                <a href="{% url 'profile-management' %}" class="btn btn-danger navbar-btn text-white" type="button">
+                    <i class="fa fa-arrow-left" aria-hidden="true">&nbsp;Geri Dön</i>
+                </a>
+
+
+            </form>
+        </div>
+    </body>
+    <br><br>
+{% endblock  %}
+    

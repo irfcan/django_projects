@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Kitap Ekle
+{% endblock  %}
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static 'books/css/style.css' %}">
+{% endblock  %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+
+      <div class="col-12">
+          <!-- content -->
+          <form action="{% url 'create-book' %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p}}
+            <!-- <div class="mb-3">
+              <label for="name" class="form-label">Kitabın Adı: </label>
+              <input type="text" class="form-control" name="name">
+            </div>
+            <div class="mb-3">
+              <label for="author" class="form-label">Yazar Adı: </label>
+              <input type="text" class="form-control" name="author">
+            </div>
+            <div class="mb-3">
+              <label for="category" class="form-label">Kategori Adı: </label>
+              <input type="text" class="form-control" name="category">
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Açıklama: </label>
+              <textarea class="form-control" name="description"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stok: </label>
+                <input type="text" class="form-control" name="stock">
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Fiyat: </label>
+                <input type="text" class="form-control" name="price">
+            </div>
+            <div class="mb-3">
+                <label for="publication_date" class="form-label">Basım Yılı: </label>
+                <input type="text" class="form-control" name="publication_date">
+            </div>
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input" name="activate">
+                <label for="activate" class="form-check-label">Aktiflik: </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Kaydet</button> -->
+          </form>
+      </div>
+  </div>
+</div>
+{% endblock  %}

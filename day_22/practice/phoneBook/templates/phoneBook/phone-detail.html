@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    {{ phone.ad }} {{ phone.soyad }}
+{% endblock  %}
+    
+{% block css_files %} 
+    <link rel="stylesheet" href="{% static 'phoneBook/css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ phone.image.url }}" alt="{{ phone.ad }}" class="img-fluid rounded">
+            </div>
+
+            <div class="col-9">
+                <h1 class="h3">Adı: {{ phone.ad }} {{ phone.soyad }} </h1>
+                <p>
+                    Kategori Adı:
+                    
+                    {% for category in phone.kategori.all %}
+                        {{ category.name }}
+                    {% endfor %} <br><br>
+
+                    Telefon: {{ phone.telefon }} <br><br>
+                    Email: {{ phone.email }} <br><br>
+                    Adres: {{ phone.adres }} <br><br>
+                    Şehir: {{ phone.sehir }} <br><br>
+                    Lokasyon: {{ phone.lokasyon }} <br><br>
+                        
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block page_title %}
+    Search
+{% endblock  %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+    
+
+
+{% block content %}
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-3">
+                <!-- menu -->
+
+                {% include 'gazeteapp/partial/__authors.html' %}
+            </div>
+            <div class="col-9">
+                <!-- content -->                
+                {% if articles|length == 0 %}
+                    <div class="alert alert-warning">Makale Bulunamadı.</div>
+                {% endif %}
+                
+                {% for article in articles %}
+                    {% include 'gazeteapp/partial/__makale.html' %}
+                {% endfor %}
+                    
+            </div>
+        </div>
+    </div>
+    
+{% endblock  %}
+    
+
+{% block js_files %}
+    
+{% endblock  %}

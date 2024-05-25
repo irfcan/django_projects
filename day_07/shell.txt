@@ -1,0 +1,372 @@
+(env) C:\Users\Techpro\Desktop\Django\day_07>python manage.py shell_plus   
+# Shell Plus Model Imports
+from books.models import Author, Book, Category
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+# Shell Plus Django Imports
+from django.core.cache import cache
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
+from django.utils import timezone
+from django.urls import reverse
+from django.db.models import Exists, OuterRef, Subquery
+Python 3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> book = Book(name="Demirciler Çarşısı Cinayeti", author="Yaşar Kemal", category="kurgu", description="Sürükleyici bir kitap", stock=25, price=550,publication_date=1974)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\base.py", line 543, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 284, in __set__
+    raise ValueError(
+ValueError: Cannot assign "'Yaşar Kemal'": "Book.author" must be a "Author" instance.
+>>> author = Author.objects.get(name="Yaşar Kemal")
+>>> author
+<Author: Yaşar Kemal>
+>>> category = Category.objects.get(name="kurgu")
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+books.models.Category.DoesNotExist: Category matching query does not exist.
+>>> category = Category(name="kurgu")
+>>> category
+<Category: kurgu>
+>>> book = Book(name="Demirciler Çarşısı Cinayeti", author=author, category=category, description="Sürükleyici bir kitap", stock=25, price=550,publication_date=1974)
+
+>>> book.save()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_07\books\models.py", line 53, in save
+    super().save(*args, **kwargs)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\base.py", line 778, in save
+    self._prepare_related_fields_for_save(operation_name="save")
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\base.py", line 1140, in _prepare_related_fields_for_save
+    raise ValueError(
+ValueError: save() prohibited to prevent data loss due to unsaved related object 'category'.
+>>> category.save()
+>>> book.save()
+>>> author1 = Author.objects.get(name="Balzac")
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+books.models.Author.DoesNotExist: Author matching query does not exist.
+>>> author1 = Author(name="Balzac")
+>>> author1.save()
+>>> author1
+<Author: Balzac>
+>>> category1 = Category.objects.get(name="roman")
+>>> category1
+<Category: roman>
+>>> book1 = Book(name="Vadideki Zambak", author=author1, category=category1, description="Çok güzel", sotck=40, price=750, publication_date=1756)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\base.py", line 567, in __init__
+    raise TypeError(
+TypeError: Book() got unexpected keyword arguments: 'sotck'
+>>> book1 = Book(name="Vadideki Zambak", author=author1, category=category1, description="Çok güzel", stock=40, price=750, publication_date=1756) 
+>>> book1.save()
+>>> book1
+<Book: Vadideki Zambak>
+
+-------------------------
+
+Python 3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> author = Author.objects.get(name="Fyodor Dostoyevski")
+>>> author
+<Author: Fyodor Dostoyevski>
+>>> category = Category.objects.get(name="kurgu")
+>>> book = Book.objects.create(name="Crime and Punishment", author=author, category=category, description="Very good", stock=27, price=485, publication_date=1866)   
+>>> book
+<Book: Crime and Punishment>
+>>> book1 = Book.objects.create(name="Karamazov Kardeşler", author=Author.objects.get(name="Fyodor Dostoyevski"), category=CAtegory.objects.get(name="roman"), stock=30, price=750, publication_date=1880)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'CAtegory' is not defined
+>>> book1 = Book.objects.create(name="Karamazov Kardeşler", author=Author.objects.get(name="Fyodor Dostoyevski"), category=Category.objects.get(name="roman"), stock=30, price=750, publication_date=1880)
+>>> book2 = Book.objects.create(name="Diriliş", author=3, category=3, stock=45, price=850, publication_date=1899)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 677, in create
+    obj = self.model(**kwargs)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\base.py", line 543, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 284, in __set__
+    raise ValueError(
+ValueError: Cannot assign "3": "Book.author" must be a "Author" instance.
+>>> book2 = Book.objects.create(name="Diriliş", author_id=3, category_id=3, stock=45, price=850, publication_date=1899) 
+>>> book2
+<Book: Diriliş>
+>>> books = Book.objects.all()
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>]>
+>>> for book in books:
+...     print(f"Kitabın adı: {book.name}")
+... 
+Kitabın adı: İnce Memed
+Kitabın adı: Vahşetin Çağrısı
+Kitabın adı: Sefiller
+Kitabın adı: Gün Olur Asra Bedel
+Kitabın adı: Demirciler Çarşısı Cinayeti
+Kitabın adı: Vadideki Zambak
+Kitabın adı: Crime and Punishment
+Kitabın adı: Karamazov Kardeşler
+Kitabın adı: Diriliş
+>>> books1 = Book.objects.filter(stock=15)
+>>> books1
+<QuerySet []>
+>>> books2 = Book.objects.filter(stock=50) 
+>>> books2
+<QuerySet [<Book: İnce Memed>]>
+>>> books2.values()
+<QuerySet [{'id': 1, 'name': 'İnce Memed', 'author_id': 1, 'category_id': 2, 'slug': 'ince-memed', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 'stock': 50, 'price': 650.0, 'publication_date': 1969, 'created_date': datetime.datetime(2024, 4, 
+2, 19, 42, 36, 121417, tzinfo=datetime.timezone.utc), 'activate': True}]>
+>>>
+
+-----------------------
+
+>>> books2.values("id", "name")
+<QuerySet [{'id': 1, 'name': 'İnce Memed'}]>
+>>> books3 = Book.objects.filter(price=750)
+>>> books3
+<QuerySet [<Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> books3.values()
+<QuerySet [{'id': 6, 'name': 'Vadideki Zambak', 'author_id': 7, 'category_id': 2, 'slug': 'vadideki-zambak', 'description': 'Çok güzel', 'stock': 40, 'price': 750.0, 'publication_date': 1756, 'created_date': datetime.datetime(2024, 4, 5, 19, 7, 7, 233878, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 8, 'name': 'Karamazov Kardeşler', 'author_id': 4, 'category_id': 2, 'slug': 'karamazov-kardesler', 'description': None, 'stock': 30, 'price': 750.0, 'publication_date': 1880, 'created_date': datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), 'activate': True}]>
+>>> books3.values()[1] 
+{'id': 8, 'name': 'Karamazov Kardeşler', 'author_id': 4, 'category_id': 2, 'slug': 'karamazov-kardesler', 'description': None, 'stock': 30, 'price': 750.0, 'publication_date': 1880, 'created_date': datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), 'activate': True}
+>>> books3.values()[1].name
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'dict' object has no attribute 'name'
+>>> books3.[1].name         
+  File "<console>", line 1
+    books3.[1].name
+           ^
+SyntaxError: invalid syntax
+>>> books3[1].name  
+'Karamazov Kardeşler'
+>>> books3.values("name")[1] 
+{'name': 'Karamazov Kardeşler'}
+>>> books3
+<QuerySet [<Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> books3.values()
+<QuerySet [{'id': 6, 'name': 'Vadideki Zambak', 'author_id': 7, 'category_id': 2, 'slug': 'vadideki-zambak', 'description': 'Çok güzel', 'stock': 40, 'price': 750.0, 'publication_date': 1756, 'created_date': datetime.datetime(2024, 4, 5, 19, 7, 7, 233878, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 8, 'name': 'Karamazov Kardeşler', 'author_id': 4, 'category_id': 2, 'slug': 'karamazov-kardesler', 'description': None, 'stock': 30, 'price': 750.0, 'publication_date': 1880, 'created_date': datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), 'activate': True}]>
+>>> books3.values()[1]
+{'id': 8, 'name': 'Karamazov Kardeşler', 'author_id': 4, 'category_id': 2, 'slug': 'karamazov-kardesler', 'description': None, 'stock': 30, 'price': 750.0, 'publication_date': 1880, 'created_date': datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), 'activate': True}
+>>> books3.values("name")[1] 
+{'name': 'Karamazov Kardeşler'}
+>>> books[1].name
+'Vahşetin Çağrısı'
+>>> books3[1].name 
+'Karamazov Kardeşler'
+>>> books3.values()[0]['name']
+'Vadideki Zambak'
+>>> books4 = Book.objects.filter(stock=45)
+>>> books4
+<QuerySet [<Book: Vahşetin Çağrısı>, <Book: Diriliş>]>
+>>> books4.reverse()
+<QuerySet [<Book: Vahşetin Çağrısı>, <Book: Diriliş>]>
+>>> books4.reverse()[1:2]
+<QuerySet [<Book: Diriliş>]>
+>>> books = Book.objects.values_list()
+>>> books
+<QuerySet [(1, 'İnce Memed', 1, 2, 'ince-memed', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 50, 650.0, 1969, datetime.datetime(2024, 4, 2, 19, 42, 36, 121417, tzinfo=datetime.timezone.utc), True), (2, 'Vahşetin Çağrısı', 2, 4, 'vahsetin-cagrs', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 45, 675.0, None, datetime.datetime(2024, 4, 2, 19, 42, 55, 469231, tzinfo=datetime.timezone.utc), True), (3, 'Sefiller', 5, 2, 'sefiller', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 60, 725.0, None, datetime.datetime(2024, 4, 2, 19, 43, 19, 688424, tzinfo=datetime.timezone.utc), True), (4, 'Gün Olur Asra Bedel', 6, 2, 'gun-olur-asra-bedel', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga 
+inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 36, 625.0, None, datetime.datetime(2024, 4, 2, 20, 43, 48, 856945, tzinfo=datetime.timezone.utc), True), (5, 'Demirciler Çarşısı Cinayeti', 1, 6, 'demirciler-carss-cinayeti', 'Sürükleyici bir kitap', 25, 550.0, 1974, datetime.datetime(2024, 4, 5, 19, 1, 24, 293619, tzinfo=datetime.timezone.utc), True), (6, 'Vadideki Zambak', 7, 2, 'vadideki-zambak', 'Çok güzel', 40, 750.0, 1756, datetime.datetime(2024, 4, 5, 19, 7, 7, 233878, tzinfo=datetime.timezone.utc), True), (7, 'Crime and Punishment', 4, 6, 'crime-and-punishment', 'Very good', 27, 485.0, 1866, datetime.datetime(2024, 4, 5, 19, 30, 59, 680502, tzinfo=datetime.timezone.utc), True), (8, 'Karamazov Kardeşler', 4, 2, 'karamazov-kardesler', None, 30, 750.0, 1880, datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), True), (9, 'Diriliş', 3, 3, 'dirilis', None, 45, 850.0, 1899, datetime.datetime(2024, 4, 5, 19, 48, 4, 835470, tzinfo=datetime.timezone.utc), True)]>
+>>> books = Book.objects.values_list("name", flat=True)
+>>> books
+<QuerySet ['İnce Memed', 'Vahşetin Çağrısı', 'Sefiller', 'Gün Olur Asra Bedel', 'Demirciler Çarşısı Cinayeti', 'Vadideki Zambak', 'Crime and Punishment', 'Karamazov 
+Kardeşler', 'Diriliş']>
+>>> books = Book.objects.values_list("price", flat=True)
+>>> books
+<QuerySet [650.0, 675.0, 725.0, 625.0, 550.0, 750.0, 485.0, 750.0, 850.0]>
+>>> book = Book.objects.first()
+>>> book
+<Book: İnce Memed>
+>>> book = Book.objects.last()  
+>>> book
+<Book: Diriliş>
+>>> book1 = Book.objects.filter(category="Roman")
+Traceback (most recent call last):
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2117, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'Roman'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1478, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1496, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1503, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1613, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1645, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1559, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1389, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\lookups.py", line 30, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2119, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got 'Roman'.
+>>> book1 = Book.objects.filter(category="roman") 
+Traceback (most recent call last):
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2117, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'roman'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1478, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1496, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1503, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1613, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1645, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1559, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1389, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\lookups.py", line 30, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2119, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got 'roman'.
+>>> category = Category.objects.get(name="roman")
+>>> book1 = Book.objects.filter(category="roman") 
+Traceback (most recent call last):
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2117, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'roman'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1478, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1496, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\query.py", line 1503, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1613, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1645, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1559, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\sql\query.py", line 1389, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\lookups.py", line 30, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\related_lookups.py", line 156, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Techpro\Desktop\Django\day_03\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2119, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got 'roman'.
+>>>
+>>> book1 = Book.objects.filter(category=category) 
+>>> book1
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> book2 = Book.objects.exclude(category=category)
+>>> book2
+<QuerySet [<Book: Vahşetin Çağrısı>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>, <Book: Diriliş>]>
+>>> author_books = Book.objects.filter(author=Author.objects.get(name="Lev Tolstoy"))
+>>> author_books
+<QuerySet [<Book: Diriliş>]>
+>>> sorted_books = Book.objects.order_by("name")
+>>> sorted_books
+<QuerySet [<Book: Crime and Punishment>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Diriliş>, <Book: Gün Olur Asra Bedel>, <Book: Karamazov Kardeşler>, <Book: Sefiller>, <Book: Vadideki Zambak>, <Book: Vahşetin Çağrısı>, <Book: İnce Memed>]>
+>>> sorted_books = Book.objects.order_by("price") 
+>>> sorted_books
+<QuerySet [<Book: Crime and Punishment>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Gün Olur Asra Bedel>, <Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>, <Book: Diriliş>]>
+>>> sorted_books = Book.objects.order_by("-price") 
+>>> sorted_books
+<QuerySet [<Book: Diriliş>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>, <Book: Sefiller>, <Book: Vahşetin Çağrısı>, <Book: İnce Memed>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>]>
+>>> min_stock = 20
+>>> available_books = Book.objects.filter(stock__gt=min_stock)
+>>> available_books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>]>
+>>> min_stock = 50
+>>> available_books = Book.objects.filter(stock__gt=min_stock)
+>>> available_books
+<QuerySet [<Book: Sefiller>]>
+>>> max_price = 690
+>>> books = Book.objects.filter(price__lt=max_price)
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>]>
+>>> books = Book.objects.filter(price__lte=max_price) 
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>]>
+>>> books_range = Book.objects.filter(publication_date__range=(1950, 2000))
+>>> books_range
+<QuerySet [<Book: İnce Memed>, <Book: Demirciler Çarşısı Cinayeti>]>
+>>> books = Book.objects.exclude(category=Category.objects.get(name="roman")).filter(stock__gte=30).order_by("price")
+>>> books
+<QuerySet [<Book: Vahşetin Çağrısı>, <Book: Diriliş>]>

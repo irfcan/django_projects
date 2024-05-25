@@ -1,0 +1,50 @@
+{% extends './base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+    <section class="p-4 text-center container">
+        <div class="row py-lg-5">
+            <div class="col col-lg-6 col-md-8 mx-auto">
+                <h4>Markamız... Sadeliğin en güzel hali.</h4>
+                <br>
+                <p class="lead text-muted">
+                    Geniş koleksiyonumuza göz atın.
+                </p>
+                <br>
+
+                <a href="#" class="btn btn-primary">Bir Hesap Oluşturun</a>
+            </div>
+        </div>
+    </section>
+    <main>
+        <div class="container-fluid">
+            <div class="row d-flex">
+                <div class="col-2">
+                    {% include 'store/partials/__sidebar.html' %}
+                </div>
+                <div class="col-10">
+                    <!-- Products -->
+                    
+                    {% for product in products %}
+                        <div class="card ms-3 me-3" style="width: 18rem;">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.title }}</h5>
+                                <p class="card-text">
+                                    {{ product.brand }} <br>
+                                    {{ product.description }} <br>
+                                    {{ product.price }}
+                                </p>
+                                <a href="#" class="btn btn-primary">Sepete Ekle</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                        
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock  %}
+    

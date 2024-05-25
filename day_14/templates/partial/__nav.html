@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg bg-info navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">Books App</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Anasayfa</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/books">Kitaplar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'create-book' %}">Kitap Ekle</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'create-author' %}">Yazar Ekle</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'book-list' %}">Kitap Listesi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">İletişim</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">Hakkımızda</a>
+          </li>
+
+        </ul>
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Hoş Geldin, {{user.username}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'login' %}">Login</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'register' %}">Register</a>
+            </li>
+          {% endif %}
+        </ul>
+        <form class="d-flex" action="{% url 'search' %}">
+          <input class="form-control ms-1" type="text" placeholder="Anahtar Kelime" name="q">
+          <button class="btn btn-danger ms-1" type="submit">Arama</button>
+        </form>
+      </div>
+    </div>
+</nav>

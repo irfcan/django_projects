@@ -1,0 +1,22 @@
+<div class="card mb-3">
+    <div class="row">
+      <div class="col-4">
+        <img src="{{ book.image.url }}" class="img-fluid rounded-start" alt="{{ book.name }}" width="200px">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Kitabın Adı: <a href="{% url 'book-detail' book.slug %}">{{book.name}}</a></h5>
+          <p class="card-text">Kitabın Açıklaması: {{ book.description | truncatechars:15}}</p>
+          <span>
+                {% if book.stock > 0 %}
+                    <span class="badge bg-success">Stokta Var</span>
+                {% else %}
+                    <span class="badge bg-warning">Yakında Gelecek</span>
+                {% endif %}
+                <p>{{ book.created_date|date:"SHORT_DATE_FORMAT" }}</p>
+          </span>
+        </div>
+      </div>
+    </div>
+</div>
+

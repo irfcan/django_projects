@@ -1,0 +1,284 @@
+Microsoft Windows [Version 10.0.19045.4291]
+(c) Microsoft Corporation. Tüm hakları saklıdır.
+
+C:\Users\Techpro\Desktop\Django\day_08\ders>env\Scripts\activate
+
+(env) C:\Users\Techpro\Desktop\Django\day_08\ders>pip install django-extensions
+Requirement already satisfied: django-extensions in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (3.2.3)
+Requirement already satisfied: Django>=3.2 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from django-extensions) (5.0.3)
+Requirement already satisfied: asgiref<4,>=3.7.0 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (3.8.1)
+Requirement already satisfied: sqlparse>=0.3.1 in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (0.4.4)  
+Requirement already satisfied: tzdata in c:\users\techpro\desktop\django\day_03\env\lib\site-packages (from Django>=3.2->django-extensions) (2024.1)
+
+(env) C:\Users\Techpro\Desktop\Django\day_08\ders>py manage.py shell_plus
+# Shell Plus Model Imports
+from books.models import Author, Book, Category
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+# Shell Plus Django Imports
+from django.core.cache import cache
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
+from django.utils import timezone
+from django.urls import reverse
+from django.db.models import Exists, OuterRef, Subquery
+Python 3.11.4 (tags/v3.11.4:d2340ef, Jun  7 2023, 05:45:37) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> author = Author.objects.all()
+>>> author 
+<QuerySet [<Author: Yaşar Kemal>, <Author: Jack London>, <Author: Lev Tolstoy>, <Author: Fyodor Dostoyevski>, <Author: Victor Hugo>, <Author: Cengiz Aytmatov>, <Author: Balzac>]>
+>>> category = Category.objects.all()
+>>> category
+<QuerySet [<Category: tarih>, <Category: roman>, <Category: psikoloji>, <Category: Macera>, <Category: Hikaye>, <Category: kurgu>]>
+>>> book = Book.objects.all()
+>>> book
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>]>
+>>> book.values
+<bound method QuerySet.values of <QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>]>>
+>>> book.values()
+<QuerySet [{'id': 1, 'name': 'İnce Memed', 'author_id': 1, 'category_id': 2, 'slug': 'ince-memed', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 'stock': 50, 'price': 650.0, 'publication_date': 1969, 'created_date': datetime.datetime(2024, 4, 2, 19, 42, 36, 121417, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 2, 'name': 'Vahşetin Çağrısı', 'author_id': 2, 'category_id': 4, 'slug': 'vahsetin-cagrs', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 'stock': 45, 'price': 675.0, 'publication_date': None, 'created_date': datetime.datetime(2024, 4, 2, 19, 42, 55, 469231, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 3, 'name': 'Sefiller', 'author_id': 5, 'category_id': 2, 'slug': 'sefiller', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum 
+eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 'stock': 60, 'price': 725.0, 'publication_date': None, 'created_date': datetime.datetime(2024, 4, 2, 19, 43, 19, 688424, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 4, 'name': 'Gün Olur Asra Bedel', 'author_id': 6, 'category_id': 2, 'slug': 'gun-olur-asra-bedel', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis molestias laudantium hic unde, molestiae, nisi eos quia natus fuga inventore praesentium cum 
+incidunt veritatis, illo perferendis odio voluptatibus provident perspiciatis?\r\nOdit eaque officia id veritatis dolor at in, inventore, beatae perspiciatis ipsam sint. Repellat ullam aut porro cupiditate illum eum, accusamus quam ipsum, deserunt, aperiam dolor sequi minima id neque?', 'stock': 36, 'price': 625.0, 'publication_date': None, 'created_date': datetime.datetime(2024, 4, 2, 20, 43, 48, 856945, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 5, 'name': 'Demirciler Çarşısı Cinayeti', 'author_id': 1, 'category_id': 6, 'slug': 'demirciler-carss-cinayeti', 'description': 'Sürükleyici bir kitap', 'stock': 25, 'price': 550.0, 'publication_date': 1974, 'created_date': datetime.datetime(2024, 4, 5, 19, 1, 24, 293619, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 6, 'name': 'Vadideki Zambak', 'author_id': 7, 'category_id': 2, 'slug': 'vadideki-zambak', 'description': 'Çok güzel', 'stock': 40, 'price': 750.0, 'publication_date': 1756, 'created_date': datetime.datetime(2024, 4, 5, 19, 7, 7, 233878, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 7, 'name': 'Crime and Punishment', 'author_id': 4, 'category_id': 6, 'slug': 'crime-and-punishment', 'description': 'Very good', 'stock': 27, 'price': 485.0, 'publication_date': 1866, 'created_date': datetime.datetime(2024, 4, 5, 19, 30, 59, 680502, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 8, 'name': 'Karamazov Kardeşler', 'author_id': 4, 'category_id': 2, 'slug': 'karamazov-kardesler', 'description': None, 'stock': 30, 'price': 750.0, 'publication_date': 1880, 'created_date': datetime.datetime(2024, 4, 5, 19, 43, 39, 682466, tzinfo=datetime.timezone.utc), 'activate': True}, {'id': 9, 'name': 'Diriliş', 'author_id': 3, 'category_id': 3, 'slug': 
+'dirilis', 'description': None, 'stock': 45, 'price': 850.0, 'publication_date': 1899, 'created_date': datetime.datetime(2024, 4, 5, 19, 48, 4, 835470, tzinfo=datetime.timezone.utc), 'activate': True}]>
+>>> book.values("name")
+<QuerySet [{'name': 'İnce Memed'}, {'name': 'Vahşetin Çağrısı'}, {'name': 'Sefiller'}, {'name': 'Gün Olur Asra Bedel'}, {'name': 'Demirciler Çarşısı Cinayeti'}, {'name': 'Vadidme': 'Vadideki Zambak'}, {'name': 'Crime and Punishment'}, {'name': 'Karamazov Kardeşler'}, {'name': 'Diriliş'}]>
+>>> book.values("id", "name")
+<QuerySet [{'id': 1, 'name': 'İnce Memed'}, {'id': 2, 'name': 'Vahşetin Çağrısı'}, {'id': 3, 'name': 'Sefiller'}, {'id': 4, 'name': 'Gün Olur Asra Bedel'}, {'id': 5, 'name': 'D 'name': 'Demirciler Çarşısı Cinayeti'}, {'id': 6, 'name': 'Vadideki Zambak'}, {'id': 7, 'name': 'Crime and Punishment'}, {'id': 8, 'name': 'Karamazov Kardeşler'}, {ame': 'Diri'id': 9, 'name': 'Diriliş'}]>
+>>> author = Author.objects.create(name="Tarık Buğra")
+>>> author
+<Author: Tarık Buğra>
+>>> book = Book.objects.create(name="Osmancık", author=author, category_id=1, stock=30, price=750, publication_date=1975)
+>>> book
+<Book: Osmancık>
+>>> book = Book.objects.filter(name__contains="Osman")
+>>> book
+<QuerySet [<Book: Osmancık>]>
+>>> book1 = Book.objects.filter(category=Category.objects.get(name__icontains="tarih"))
+>>> book1
+<QuerySet [<Book: Osmancık>]>
+>>> book2 = Book.objects.filter(category=Category.objects.get(name__icontains="roman")) 
+>>> book2
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> book3 = Book.objects.exclude(category=Category.objects.get(name__icontains="roman")) 
+>>> book3
+<QuerySet [<Book: Vahşetin Çağrısı>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>, <Book: Diriliş>, <Book: Osmancık>]>
+>>>
+>>> sorted_books = Book.objects.order_by("name")
+>>> sorted_books
+<QuerySet [<Book: Crime and Punishment>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Diriliş>, <Book: Gün Olur Asra Bedel>, <Book: Karamazov Kardeşler>, <Book: Osmancık>, <Book: Sefiller>, <Book: Vadideki Zambak>, <Book: Vahşetin Çağrısı>, <Book: İnce Memed>]>
+>>> sortedbooks = Book.objects.order_by("-price")
+>>> sortedbooks
+<QuerySet [<Book: Diriliş>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>, <Book: Osmancık>, <Book: Sefiller>, <Book: Vahşetin Çağrısı>, <Book: İnce Memed>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>]>
+>>> books = Book.objects.filter(stock__gt=30)
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Diriliş>]>
+>>> books = Book.objects.filter(price__lte=800)
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Osmancık>]>
+>>> books = Book.objects.filter(price__range=(250, 500))
+>>> books
+<QuerySet [<Book: Crime and Punishment>]>
+
+>>> book = Book.objects.exclude(category=Category.objects.get(name__icontains="roman")).filter(stock__gt=0).order_by("-price") 
+>>> book
+<QuerySet [<Book: Diriliş>, <Book: Osmancık>, <Book: Vahşetin Çağrısı>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Crime and Punishment>]>
+>>> book = Book.objects.filter(category=Category.objects.get(name__icontains="roman"), stock__gt=10)
+>>> book
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> book = Book.objects.filter(author__name__icontains="yaşar", category__name__icontains="roman")
+>>> book
+<QuerySet [<Book: İnce Memed>]>
+>>> book1 = Book.objects.filter(name__icontains="osman").exists()
+>>> book1
+True
+>>> book2 = Book.objects.filter(id__exact=10)
+>>> book2
+<QuerySet [<Book: Osmancık>]>
+>>> book3 = Book.objects.filter(name__exact="diriliş")
+>>> book3
+<QuerySet []>
+>>> book3 = Book.objects.filter(name__iexact="diriliş") 
+>>> book3
+<QuerySet [<Book: Diriliş>]>
+>>> book4 = Book.objects.filter(stock__in=[10, 20])
+>>> book4
+<QuerySet []>
+>>> book4 = Book.objects.filter(stock__in=[30, 20]) 
+>>> book4
+<QuerySet [<Book: Karamazov Kardeşler>, <Book: Osmancık>]>
+
+>>>
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> 
+>>> books = Book.objects.filter(name__icontains="punish") | Book.objects.filter(stock__gte=50)
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Crime and Punishment>]>
+>>>
+>>> 
+>>> books = Book.objects.values("name", "author__name", "category__name", "stock")
+>>> books
+<QuerySet [{'name': 'İnce Memed', 'author__name': 'Yaşar Kemal', 'category__name': 'roman', 'stock': 50}, {'name': 'Vahşetin Çağrısı', 'author__name': 'Jack London', 'category__name': 'Macera', 'stock': 45}, {'name': 'Sefiller', 'author__name': 'Victor Hugo', 'category__name': 'roman', 'stock': 60}, {'name': 'Gün Olur Asra Bedel', 'author__name': 'Cengiz Aytmatov', 'category__name': 'roman', 'stock': 36}, {'name': 'Demirciler Çarşısı Cinayeti', 'author__name': 'Yaşar Kemal', 'category__name': 'kurgu', 'stock': 25}, {'name': 'Vadideki Zambak', 'author__name': 'Balzac', 'category__name': 'roman', 'stock': 40}, {'name': 'Crime and Punishment', 'author__name': 'Fyodor Dostoyevski', 'category__name': 'kurgu', 'stock': 27}, {'name': 'Karamazov Kardeşler', 'author__name': 'Fyodor Dostoyevski', 'category__name': 'roman', 
+'stock': 30}, {'name': 'Diriliş', 'author__name': 'Lev Tolstoy', 'category__name': 'psikoloji', 'stock': 45}, {'name': 'Osmancık', 'author__name': 'Tarık Buğra', 'category__name': 'tarih', 'stock': 30}]>
+
+>>> for book in books:                  
+...     print(f"Kitap adı: {book['name']}")
+...     print(f"Yazar adı: {book['author__name']}")
+...     print(f"Kategori: {book['category__name']}")
+...     print(f"Stok Durumu: {book['stock']}")
+...     print("------------------")
+... 
+Kitap adı: İnce Memed
+Yazar adı: Yaşar Kemal
+Kategori: roman
+Stok Durumu: 50
+------------------
+Kitap adı: Vahşetin Çağrısı
+Yazar adı: Jack London
+Kategori: Macera
+Stok Durumu: 45
+------------------
+Kitap adı: Sefiller
+Yazar adı: Victor Hugo
+Kategori: roman
+Stok Durumu: 60
+------------------
+Kitap adı: Gün Olur Asra Bedel
+Yazar adı: Cengiz Aytmatov
+Kategori: roman
+Stok Durumu: 36
+------------------
+Kitap adı: Demirciler Çarşısı Cinayeti
+Yazar adı: Yaşar Kemal
+Kategori: kurgu
+Stok Durumu: 25
+------------------
+Kitap adı: Vadideki Zambak
+Yazar adı: Balzac
+Kategori: roman
+Stok Durumu: 40
+------------------
+Kitap adı: Crime and Punishment
+Yazar adı: Fyodor Dostoyevski
+Kategori: kurgu
+Stok Durumu: 27
+------------------
+Kitap adı: Karamazov Kardeşler
+Yazar adı: Fyodor Dostoyevski
+Kategori: roman
+Stok Durumu: 30
+------------------
+Kitap adı: Diriliş
+Yazar adı: Lev Tolstoy
+Kategori: psikoloji
+Stok Durumu: 45
+------------------
+Kitap adı: Osmancık
+Yazar adı: Tarık Buğra
+Kategori: tarih
+Stok Durumu: 30
+------------------
+>>>
+>>> 
+>>> books = Book.objects.all()
+>>> books           
+<QuerySet [<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>, <Book: Osmancık>]>
+>>> book_list = list(books)
+>>> book_list
+[<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>, <Book: Osmancık>]
+>>> book_tuple = tuple(books)
+>>> book_tuple
+(<Book: İnce Memed>, <Book: Vahşetin Çağrısı>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Demirciler Çarşısı Cinayeti>, <Book: Vadideki Zambak>, <Book: Crime and Punishment>, <Book: Karamazov Kardeşler>, <Book: Diriliş>, <Book: Osmancık>)
+>>> book_dict = {book.id: book.name for book in books}
+>>> book_dict
+{1: 'İnce Memed', 2: 'Vahşetin Çağrısı', 3: 'Sefiller', 4: 'Gün Olur Asra Bedel', 5: 'Demirciler Çarşısı Cinayeti', 6: 'Vadideki Zambak', 7: 'Crime and Punishment', 
+8: 'Karamazov Kardeşler', 9: 'Diriliş', 10: 'Osmancık'}
+>>>
+>>> 
+
+>>> book = Book.objects.get(name__icontains="punish").update(name="Suç ve Ceza") 
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Book' object has no attribute 'update'
+>>> book = Book.objects.filter(name__icontains="punish").update(name="Suç ve Ceza") 
+>>> book
+1
+>>> category = Category.objects.filter(name__icontains="psi").update(name="PSİKOLOJİ")
+>>> 
+>>> 
+>>> book = Book.objects.filter(name__icontains="osman").delete()
+>>> book
+(1, {'books.Book': 1})
+>>>
+>>> 
+>>> 
+>>> 
+>>> 
+
+>>> total_stock = Book.objects.aggregate(total_stock=Sum("stock"))
+>>> total_stock
+{'total_stock': 358}
+>>> total_price = Book.objects.aggregate(total_price=Sum("price"))
+>>> total_price
+{'total_price': 6060.0}
+>>> total_roman = Book.objects.filter(category__name__icontains="roman").aggregate(total_roman=Sum("stock"))
+>>> total_roman
+{'total_roman': 216}
+>>> total_exroman_price = Book.objects.exclude(category__name__icontains="roman").aggregate(total_exroman_price=Sum("price"))
+
+>>> total_exroman_price 
+{'total_exroman_price': 2560.0}
+>>> average_prices = Book.objects.values("category__name").annotate(average_prices=Avg("price"))
+>>> average_prices
+<QuerySet [{'category__name': 'Macera', 'average_prices': 675.0}, {'category__name': 'PSİKOLOJİ', 'average_prices': 850.0}, {'category__name': 'kurgu', 'average_prices': 517.5}, {'category__name': 'roman', 'average_prices': 700.0}]>
+>>>
+>>> 
+>>> book = Book.objects.filter(category__name__icontains="roman") | Book.objects.filter(stock__gte=100)
+>>> book
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>>
+>>> from django.db.models import Q
+
+>>> book1 = Book.objects.filter(Q(category__name__icontains="roman") | Q(stock__gte=100))  
+>>> book1
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> books = Book.objects.filter(Q(category__name__icontains="kurgu") | Q(category__name__icontains="tarih"), price__gt=100)
+>>> books
+<QuerySet [<Book: Demirciler Çarşısı Cinayeti>, <Book: Suç ve Ceza>]>
+>>> fyodor = Q(author=Author.objects.get(name__icontains="fyodor"))
+>>> tolstoy = Q(author=Author.objects.get(name__icontains="tolstoy"))
+>>> books = Book.objects.filter((fyodor | tolstoy) & Q(category__name__icontains="tarih"))
+>>> books
+<QuerySet []>
+>>> books = Book.objects.filter((fyodor | tolstoy) & Q(price__range=(100,500)))            
+>>> books
+<QuerySet [<Book: Suç ve Ceza>]>
+>>> books = Book.objects.filter(Q(author__name__icontains="tolstoy") & Q(stock__lt=10) & Q(price__lt=700))
+>>> books
+<QuerySet []>
+>>> books = Book.objects.filter(Q(author__name__icontains="tolstoy") & Q(stock__gt=10) & Q(price__lt=700)) 
+>>> books
+<QuerySet []>
+>>> books = Book.objects.filter(Q(category__name__icontains="roman") & (Q(stock__lte=50) | Q(price__gte=200)))
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>
+>>> tarik = Q(author=Author.objects.get(name__icontains="tarık"))
+
+>>> books = Book.objects.filter(Q(category__name__icontains="tarih") & ~tarik)  
+>>> books
+<QuerySet []>
+>>> books = Book.objects.filter(Q(category__name__icontains="roman") & ~tarik) 
+>>> books
+<QuerySet [<Book: İnce Memed>, <Book: Sefiller>, <Book: Gün Olur Asra Bedel>, <Book: Vadideki Zambak>, <Book: Karamazov Kardeşler>]>

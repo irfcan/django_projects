@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+    Hakkımızda
+{% endblock  %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Yazarın Resmi</th>
+                            <th scope="col">Yazarın Adı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for author in authors %}
+                            <tr>
+                                <td><img src="{% static 'img/yazar.jpg' %}" class="img-fluid rounded-start" alt="yazar" width="200px"></td>
+                                <td><a href="{% url 'author-detail' author.slug %}">{{ author }}</a></td>
+                            </tr>
+                        {% endfor %}  
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    

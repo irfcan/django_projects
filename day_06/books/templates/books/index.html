@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+  Kitaplar Anasayfa
+{% endblock  %}
+  
+
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-3">
+
+        {% include 'books/partial/__categories.html' %}
+
+      </div>
+
+      <div class="col-9">
+          <!-- content -->
+          
+          {% for book in books %}
+            <div class="card mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <img src="https://w7.pngwing.com/pngs/776/145/png-transparent-books-illustration-book-book-rectangle-presentation-desktop-wallpaper-thumbnail.png" class="img-fluid rounded-start" alt="resim">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Kitabın Adı: {{book.name}}</h5>
+                    <p class="card-text">Kitabın Açıklaması: {{ book.description}}</p>
+                    <p class="card-text">Kitabın Kategorisi: {{ book.category}}</p>
+                    <p class="card-text">Kitabın Yazarı: {{ book.author}}</p>
+                    <p class="card-text"><small class="text-body-secondary">Kitabın Fiyatı: {{ book.price }}</small></p>
+                    <p class="card-text"><small class="text-body-secondary">Kitap Stok Adeti: {{ book.stock }}</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+            
+      </div>
+  </div>
+</div>
+{% endblock  %}
+  

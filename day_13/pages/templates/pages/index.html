@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+  Anasayfa
+{% endblock  %}
+  
+
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+      <div class="col-3">
+
+        {% include 'books/partial/__categories.html' %}
+      
+      </div>
+      
+      <div class="col-9">
+          <!-- content -->
+          <h1>Anasayfa</h1>       
+      </div>
+  </div>
+</div>
+{% endblock  %}
+  

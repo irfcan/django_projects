@@ -1,0 +1,90 @@
+    {% include 'store/base.html' %}
+
+    {% load static %}
+
+    {% load mathfilters %}
+
+    {% block content %}
+        <main class="pt-5">
+            <div class="container">
+                <h1 class="h5">Alışveriş Sepeti</h1>
+                <hr>
+
+                
+                {% for item in cart %}
+                    {% with product=item.product %}
+
+                    <br>
+
+                    <div class="row mb-4 border product-item">
+                        <div class="col-md-3 col-lg-2 order-md-first bg-light">
+                            <img width="200px" src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid mx-auto d-block">
+                        </div>
+
+                        <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
+                            <a href="{{ product.get_absolute_url }}" class="text-info text-decoration-none">
+                                <h1 class="h5 pt-2">{{ product.title }}</h1>
+                            </a>
+                        </div>
+
+                        <div class="border">
+                            <div class="col border-bottom">
+                                <div class="row p-3">
+                                    <div class="col-6">Ürün</div>
+                                    <div class="col-6 text-end">
+                                        <span class="h6 fw-bold">
+                                            {{product.price|mul:item.qty}} ₺
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row p-3">
+                                    <div class="col-12">
+                                        <label for="select">Adet</label>
+                                        &nbsp;
+                                        <select id="select{{product.id}}">
+                                            <option selected>
+                                                {{ item.qty }}
+                                            </option>
+                                            <option value="">1</option>
+                                            <option value="">2</option>
+                                            <option value="">3</option>
+                                            <option value="">4</option>
+                                        </select>
+                                        <br><br>
+                                        <button type="button" class="btn btn-primary bt-sm update-button" data-index="{{ product.id }}">
+                                            Güncelle
+                                        </button>
+                                        &nbsp;
+                                        <button type="button" class="btn btn-danger delete-button" data-index="{{ product.id }}">
+                                            Sil
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+
+                <div class="col-12 text-end">
+                    <div class="h6 fw-bold">
+                        Toplam: <div class="d-iline-flex" id="total">{{ cart.get_total }} ₺</div>
+                    </div>
+                    <br>
+                    <a href="#" class="btn btn-primary my-2"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>&nbsp;Siparişi Tamamla</a>
+                </div>
+                    
+            </div>
+
+            
+
+            <br>
+
+            <br>
+
+        </main>
+
+
+    {% endblock  %} 

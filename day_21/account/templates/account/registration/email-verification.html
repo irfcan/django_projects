@@ -1,0 +1,13 @@
+
+{% autoescape off %}
+
+    Merhaba,
+
+    Web sitemize kayıt olduğun için teşekkürler.
+
+    Lütfen aşağıdaki bağlantıya tıklayarak e-postanızı doğrulama nezaketini gösteriniz:
+
+    http://{{ domain }}{% url "email-verification" udidb64=uid token=token %}
+
+
+{% endautoescape %}

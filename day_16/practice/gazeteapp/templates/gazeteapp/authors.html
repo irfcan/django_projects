@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+    Hakkımızda
+{% endblock  %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock  %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 120px;">Yazarın Resmi</th>
+                            <th scope="col">Yazarın Adı</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col" style="width: 150px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for author in authors %}
+                            <tr>
+                                <td><img src="{{ author.image.url }}" class="img-fluid rounded-start" alt="{{ author }}" width="200px"></td>
+                                <td><a href="{% url 'author-detail' author.slug %}">{{ author }}</a></td>
+                                <td>{{ author.slug }}</td>
+                                <td>
+                                    <a href="{% url 'author-edit' author.slug %}" class="btn btn-info">Güncele</a>
+                                    <a href="{% url 'author-delete' author.slug %}" class="btn btn-warning">Sil</a>
+                                </td>
+                            </tr>
+                        {% endfor %}  
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
+    
